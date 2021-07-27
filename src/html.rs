@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
 use crate::dom::{AttrMap, Element, Node, Text};
 use combine::error::ParseError;
-use combine::parser::char::{char, letter, newline, space};
+use combine::parser::char::{char, letter, newline, space, string};
 #[allow(unused_imports)]
 use combine::EasyParser;
 use combine::{parser, Parser, Stream, many, many1, between, satisfy};
@@ -61,8 +61,12 @@ where
     Input: Stream<Token = char>,
     Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
 {
-    todo!("you need to implement this combinator");
-    (char(' ')).map(|_| ("".to_string()))
+    (
+        string("</"),
+        many1(letter()),
+        char('>')
+    )
+        .map(|v| v.1)
 }
 
 // `nodes_` (and `nodes`) tries to parse input as Element or Text.
