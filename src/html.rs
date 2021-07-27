@@ -28,8 +28,13 @@ where
     Input: Stream<Token = char>,
     Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
 {
-    todo!("you need to implement this combinator");
-    (char(' ')).map(|_| AttrMap::new())
+    many(
+        (
+            attribute(),
+            many::<String, _, _>(space().or(newline())),
+        )
+            .map(|v| v.0)
+    )
 }
 
 /// `open_tag` consumes `<tag_name attr_name="attr_value" ...>`.
